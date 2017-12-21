@@ -1,0 +1,105 @@
+version: '2'
+services:
+
+  # application (code)
+  app:
+    restart: always
+    build:
+      context: ${PROJECT_DIR}
+      dockerfile: build/prod/app.dockerfile
+    working_dir: /app
+#    volumes:
+#      - ${PROJECT_DIR}:/app
+    networks:
+      - puzzland
+    environment:
+      - DB_PORT=5432
+      - DB_HOST=database
+
+  # http server
+  web:
+    restart: always
+    build:
+      context: ${PROJECT_DIR}
+      dockerfile: build/prod/web.dockerfile
+    working_dir: /app
+    networks:
+      - puzzland
+    environment:
+      - VIRTUAL_HOST=puzzland.dals.media,api.puzzland.dev
+#    volumes:
+#      - ${PROJECT_DIR}:/app
+#    ports:
+#      - 888:80
+
+  # database
+  database:
+    restart: always
+    image: postgres:9.6
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
+    networks:
+      - puzzland
+    environment:
+      - POSTGRES_DB=puzzland
+      - POSTGRES_USER=dals_user_puzzland
+      - POSTGRES_PASSWORD=sgn87d5fga87dfgf4Gb6
+
+  # adminer
+  # login:password  pazziner:hDBgfh4e34g3b35b4w45grt
+  adminer:
+    image: adminer
+    networks:
+      - puzzland
+#    ports:
+#      - 9999:8080
+    environment:
+      - VIRTUAL_HOST=adminer.puzzland.dev
+
+  # login:password  puzztainer:hng7AFjdfg7AEfb34ld-8De
+  portainer:
+    image: portainer/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - puzzland
+#    ports:
+#      - 800:9000
+    environment:
+      - VIRTUAL_HOST=portainer.puzzland.dev
+
+
+  jenkins:
+    build:
+      context: ./
+      dockerfile: jenkins.dockerfile
+    container_name: jenkins
+    networks:
+      - puzzland
+    volumes:
+      - ~/jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.ssh/:/root/.ssh
+    environment:
+      - VIRTUAL_HOST=jenkins.puzzland.dev
+      - VIRTUAL_PORT=8080
+
+
+  proxy:
+    restart: always
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+#      - ${PROJECT_DIR}/build/prod/nginx/htpasswd:/etc/nginx/htpasswd
+    networks:
+      - puzzland
+    ports:
+      - 80:80
+    environment:
+      - DEFAULT_HOST=puzzland.dals.media
+
+
+networks:
+  puzzland:
+    driver: "bridge"

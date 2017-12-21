@@ -1,0 +1,18 @@
+version: '2'
+services:
+
+  # database
+  database:
+    container_name: database_tests
+    image: postgres:9.6
+    networks:
+      - puzzland_test
+    environment:
+      - POSTGRES_DB=puzzland
+      - POSTGRES_USER=dals_user_puzzland
+      - POSTGRES_PASSWORD=sgn87d5fga87dfgf4Gb6
+
+
+networks:
+  puzzland_test:
+    driver: bridge

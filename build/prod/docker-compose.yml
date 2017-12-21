@@ -1,0 +1,104 @@
+version: '2'
+services:
+
+  # application (code)
+  app:
+    restart: always
+    build:
+      context: ./
+      dockerfile: app.dockerfile
+    working_dir: /app
+    extra_hosts:
+     - files.dals.media:178.33.40.18
+    volumes:
+      - ${PROJECT_DIR}:/app
+    networks:
+      - studio
+    environment:
+      - DB_PORT=5432
+      - DB_HOST=database
+
+
+  cron:
+    restart: always
+    build:
+      context: ./
+      dockerfile: cron.dockerfile
+    networks:
+      - studio
+
+
+  # http server
+  web:
+    restart: always
+    build:
+      context: ./
+      dockerfile: web.dockerfile
+    working_dir: /app
+    networks:
+      - studio
+    volumes_from:
+      - app
+    environment:
+      - VIRTUAL_HOST=puzzland.dals.media,api.puzzland.dev
+      - LETSENCRYPT_HOST=puzzland.dals.media
+      - LETSENCRYPT_EMAIL=spirivak@gmail.com
+      - DEFAULT_HOST=puzzland.dals.media
+
+  # database
+  database:
+    restart: always
+    image: postgres:9.6
+    volumes:
+      - /var/lib/postgresql:/var/lib/postgresql
+      - /var/log/postgresql:/var/log/postgresql
+    networks:
+      - studio
+    environment:
+      - POSTGRES_DB=studio
+      - POSTGRES_USER=studio
+      - POSTGRES_PASSWORD=df8Ad4g7apiq/v,nUre4giae4gI5aEd4B7d3b43
+    ports:
+      - 12135:5432
+
+  # adminer
+  adminer:
+    image: adminer
+    networks:
+      - studio
+    environment:
+      - VIRTUAL_HOST=adminer.puzzland.dev
+
+
+  proxy:
+    restart: always
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ${PROJECT_DIR}/build/prod/nginx/certs:/etc/nginx/certs:ro
+      - ${PROJECT_DIR}/build/prod/nginx/vhost.d:/etc/nginx/vhost.d
+      - ${PROJECT_DIR}/build/prod/nginx/html:/usr/share/nginx/html
+    networks:
+      - studio
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - DEFAULT_HOST=puzzland.dals.media
+
+  letsencrypt:
+    restart: always
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ${PROJECT_DIR}/build/prod/nginx/certs:/etc/nginx/certs:rw
+    volumes_from:
+      - proxy
+
+networks:
+    studio:
+    driver: "bridge"
