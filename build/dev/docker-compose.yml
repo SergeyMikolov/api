@@ -15,6 +15,13 @@ services:
       - DB_PORT=5432
       - DB_HOST=database
 
+  redis:
+    image: 'bitnami/redis:latest'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_EXTRA_FLAGS=--maxmemory 100mb
+    networks:
+      - studio
 
   cron:
     build:
