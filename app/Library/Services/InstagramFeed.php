@@ -1,6 +1,11 @@
 <?php
 
+namespace App\Library\Services;
+
+use App\Library\Services\Contracts\InstagramFeedInterface;
+use App\Models\BotAccount;
 use InstagramAPI\Instagram;
+use InstagramAPI\Response\Model\Item;
 
 /**
  * Class InstagramFeed
@@ -11,28 +16,21 @@ class InstagramFeed implements InstagramFeedInterface
 	 * studio name
 	 */
 	const STUDIO = 'anastasiyaeroshkina_poledance';
+
 	/**
-	 *
+	 * sleep time
 	 */
 	const SLEEP = 1;
 
-	/**
-	 * @return \Illuminate\Support\Collection
-	 */
-	public function getUserData ()
+	protected function getUserData ()
 	{
-		//todo заменить на модельки в базе
-
-		return collect([
-			'name' => 'studioapi',
-			'password' => '7411328',
-		]);
+		dd( BotAccount::inRandomOrder()->first());
 	}
 
 	/**
 	 * @return Instagram
 	 */
-	public function login ()
+	protected function login ()
 	{
 		$user = $this->getUserData();
 
@@ -51,7 +49,7 @@ class InstagramFeed implements InstagramFeedInterface
 	 * @param $instagram Instagram
 	 * @return \Illuminate\Support\Collection|static
 	 */
-	public function getUserFeed ($instagram)
+	protected function getUserFeed ($instagram)
 	{
 		// Starting at "null" means starting at the first page.
 		$maxId = null;
@@ -85,11 +83,80 @@ class InstagramFeed implements InstagramFeedInterface
 	 * @param $items \Illuminate\Support\Collection|static
 	 * @return mixed
 	 */
-	public function makeFeedCollection ($items)
+	protected function makeFeedCollection ($items)
 	{
-		return $items->map(function(\InstagramAPI\Response\Model\Item $item) {
-
+		return $items->map(function(Item $item) {
+			return [
+				'id' => $item->getId(),
+				'media_type' => $item->getMediaType(),
+				'medias' => $this->getMediaCollection($item),
+			];
 		});
 	}
 
+	/**
+	 * @param Item $item
+	 * @return array|\InstagramAPI\Response\Model\VideoVersions[]|string
+	 */
+	protected function getMediaCollection(Item $item)
+	{
+		switch ($item->getMediaType()) {
+			case Item::PHOTO:
+				$medias = $this->preparePhoto($item);
+				break;
+			case Item::ALBUM:
+				$medias = $this->prepareAlbum($item);
+				break;
+			case Item::VIDEO:
+				$medias = $this->prepareVideo($item);
+				break;
+			default:
+				return 'Undefined media type';
+		}
+
+		return $medias;
+	}
+
+	/**
+	 * @param Item $item
+	 * @return array
+	 */
+	protected function preparePhoto(Item $item)
+	{
+		return [$item->image_versions2->candidates];
+	}
+
+	/**
+	 * @param Item $item
+	 * @return array
+	 */
+	protected function prepareAlbum(Item $item)
+	{
+		$medias = [];
+
+		foreach ($item->carousel_media as $media) {
+			$medias[] = $media->image_versions2->candidates;
+		}
+
+		return $medias;
+	}
+
+	/**
+	 * @param Item $item
+	 * @return \InstagramAPI\Response\Model\VideoVersions[]
+	 */
+	protected function prepareVideo(Item $item)
+	{
+		return $item->video_versions;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function get()
+	{
+		$items = $this->getUserFeed($this->login());
+
+		return $this->makeFeedCollection($items);
+	}
 }

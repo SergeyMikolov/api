@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InstagramFeedRequest;
+use App\Library\Services\InstagramFeed;
 use Illuminate\Support\Facades\Cache;
 use InstagramAPI\Instagram;
 
@@ -11,81 +13,54 @@ use InstagramAPI\Instagram;
  */
 class InstagramController extends Controller
 {
+	/**
+	 * @var InstagramFeed
+	 */
 	protected $instagramFeed;
 
 	/**
-	 * studio name
+	 * InstagramController constructor.
+	 * @param InstagramFeed $instagramFeed
 	 */
-	const STUDIO = 'anastasiyaeroshkina_poledance';
-
-	/**
-	 * studio id
-	 */
-	const USERID = 5539307227;
-//
-//	/**
-//	 * InstagramController constructor.
-//	 * @param \InstagramFeed $instagramFeed
-//	 */
-//	public function __construct (\InstagramFeed $instagramFeed)
-//	{
-//		$this->instagramFeed = $instagramFeed;
-//	}
-
-	public function get1 ()
+	public function __construct (InstagramFeed $instagramFeed)
 	{
-		//todo заменит на нормальные
-		$params = [
-			'accessToken'  => '5539307227.d377a25.8c4f8b3bcc9049c7860bcdee99def360',
-			'clientId'     => 'd377a25c11364b2bba60676652053222',
-			'clientSecret' => '037b4e8e5cc84b1f8921d065e1ac5d0b ',
-			'redirectUri'  => 'https://elfsight.com/service/generate-instagram-access-token/',
-		];
-
-		$config = [
-			'allow_redirects' => false,
-			'http_errors'     => false,
-		];
-
-		$instagram = new Instagram();
-		$user = $instagram->user();
-		$next_max_id = '';
-		$pagination = 19;
-		while (true) {
-			$media = $user->selfMediaRecent('5', '', $next_max_id);
-			Cache::tags(['instMedia'])->put($pagination, $media->data, 10);
-
-			if (!isset($media->pagination->next_max_id))
-				break;
-			var_dump($media->pagination->next_max_id);
-			$next_max_id = $media->pagination->next_max_id;
-			$pagination += 19;
-
-		};
-
+		$this->instagramFeed = $instagramFeed;
 	}
 
-	public function get()
+	/**
+	 * Get instagram feed(paginated)
+	 *
+	 * @param InstagramFeedRequest $request
+	 * @return mixed
+	 */
+	public function get (InstagramFeedRequest $request)
 	{
-//		Cache::tags(['instMedia'])->flush();
-//		dd(Cache::tags(['instMedia'])->get('38'));
+		return Cache::remember('test', '10', function() {
+			return $this->instagramFeed->get();
+		})->forPage($request->page, $request->on_page)->values();
+	}
 
+	/**
+	 *
+	 */
+	public function test ()
+	{
 		/////// CONFIG ///////
-		$username = 'studioapi';
-		$password = '7411328';
-		$debug = false;
+		$username       = 'studioapi';
+		$password       = '7411328';
+		$debug          = false;
 		$truncatedDebug = false;
 //////////////////////
 		$ig = new Instagram($debug, $truncatedDebug);
 		try {
 			$ig->login($username, $password);
 		} catch (\Exception $e) {
-			echo 'Something went wrong: '.$e->getMessage()."\n";
+			echo 'Something went wrong: ' . $e->getMessage() . "\n";
 			exit(0);
 		}
 		try {
 			// Get the UserPK ID for "anastasiyaeroshkina_poledance" (National Geographic).
-			$userId = $ig->people->getUserIdForName('studioapi');
+			$userId = $ig->people->getUserIdForName('anastasiyaeroshkina_poledance');
 			// Starting at "null" means starting at the first page.
 			$maxId = null;
 			do {
@@ -95,6 +70,7 @@ class InstagramController extends Controller
 				$items = $response->getItems();
 //				dd(($response));
 				foreach ($items as $item) {
+//					dd($item->getMediaType());
 					dump($item);
 					printf("[%s] https://instagram.com/p/%s/\n", $item->getId(), $item->getCode());
 				}
@@ -111,8 +87,10 @@ class InstagramController extends Controller
 				sleep(1);
 			} while ($maxId !== null); // Must use "!==" for comparison instead of "!=".
 		} catch (\Exception $e) {
-			echo 'Something went wrong: '.$e->getMessage()."\n";
+			echo 'Something went wrong: ' . $e->getMessage() . "\n";
 		}
 
 	}
+
+	//ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8IA9AljSZMP6aVc8HNqXs81fkqmL1NGDJW7gz0s7VZftFo7zmV3gDy8ruuZQD58Jex2VHdlw2y9jRPb4oW6/5axYBrha9rTiw+g4ALw/bjoFiH2pDiNLArJrWsv7pnz96MzHR1eohBM01r6rxcuVrjVDOeTF1RVkPGYen+20jMPUMdUk+C65Ly05OZu+eSgtE84BV8P5E4vE4E1ISf4Vg/Gj1PeHBxeZsXy3h9h7Br7UkhBmGkdVlOheVsiM4vrSJV1Qi+OsMBTElKRjA5r+S9pUx/MkQ8Xq+ePe68vWd25DMtXROaAvFLkBVbnPBqQxqtsqyZ4r4Rdkj8PnmB10OkZ2p2PWmuVEpFeBoJ7ySwBpUWiIQdflXPz4h5RO2z1p5Sr5EWy7mJYY55tMuXntzztRjlBoCZ36B7phXVaz0vH6tZ24xdojA5AawcOEYqQWOjx2/rD8aWUHfCz2EiLOU1FSO6GBopQmbJ2OAg2cQc+QygZfuMPKNZFr96JNFYbZFgEZYSnL6cUJZu5vjdHxRUHqB/7gcRHwAspuEphfYGrVu+yP2arh2wCbvtZzmgj9ptYE19BY4kpQ6OO7HwFVWuhl9vZX+UoMVTc5Gff91Ixs+jUE7HNNN8iWf55UwJN4zJ6rbk9eMsSkIx+daWHL8Rc5XM/bFp/cFgKAELkST5Q== sergeymikolob@gmail.com
 }

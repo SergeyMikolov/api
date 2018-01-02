@@ -1,12 +1,15 @@
 <?php
 
+namespace App\Library\Services\Contracts;
+
+/**
+ * Interface InstagramFeedInterface
+ * @package App\Library\Services\Contracts
+ */
 interface InstagramFeedInterface
 {
-	public function getUserData();
-
-	public function login();
-
-	public function getUserFeed($instagram);
-
-	public function makeFeedCollection($apiResponse);
+	/**
+	 * @return mixed
+	 */
+	public function get();
 }
