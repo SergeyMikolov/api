@@ -6,6 +6,7 @@ use App\Http\Requests\InstagramFeedRequest;
 use App\Library\Services\InstagramFeed;
 use Illuminate\Support\Facades\Cache;
 use InstagramAPI\Instagram;
+use Response;
 
 /**
  * Class InstagramController
@@ -31,15 +32,29 @@ class InstagramController extends Controller
 	 * Get instagram feed(paginated)
 	 *
 	 * @param InstagramFeedRequest $request
-	 * @return mixed
+	 * @return \Illuminate\Http\Response
 	 */
 	public function get (InstagramFeedRequest $request)
 	{
-		return Cache::remember('test', '10', function() {
-			return $this->instagramFeed->get();
-		})
-					->forPage($request->page, $request->on_page)
-					->values();
+		Cache::delete('test');
+		try {
+			return Cache::remember('test', $this->instagramFeed::CACHETIME, function() {
+				return $this->instagramFeed->get();
+			})
+						->forPage($request->page, $request->on_page)
+						->values();
+		} catch (\Exception $exception) {
+
+			\Log::error($exception->getMessage(), [
+				'file' => $exception->getFile(),
+				'line' => $exception->getLine(),
+			]);
+
+			return Response::make([
+				'message'     => 'Service Unavailable',
+				'status_code' => 503,
+			], 503);
+		}
 	}
 
 	/**

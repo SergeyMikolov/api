@@ -4,6 +4,7 @@ namespace App\Library\Services;
 
 use App\Library\Services\Contracts\InstagramFeedInterface;
 use App\Models\BotAccount;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use InstagramAPI\Instagram;
 use InstagramAPI\Response\Model\Item;
 
@@ -23,30 +24,41 @@ class InstagramFeed implements InstagramFeedInterface
 	const SLEEP = 1;
 
 	/**
+	 * Cache time in minutes
+	 */
+	const CACHETIME = 10;
+
+	/**
 	 * Get random instagram bot's login data
 	 *
 	 * @return \Illuminate\Database\Eloquent\Model|null|static
 	 */
 	protected function getUserData ()
 	{
-		return BotAccount::inRandomOrder()->first();
+		$user = BotAccount::inRandomOrder()->first();
+
+		if (is_null($user))
+			throw new ModelNotFoundException("No bot's accounts");
+
+		return $user;
 	}
 
 	/**
 	 * Get logged instagram model
 	 *
 	 * @return Instagram
+	 * @throws \Exception
 	 */
 	protected function login ()
 	{
+		/** @var BotAccount $user */
 		$user = $this->getUserData();
 
 		$instagram = new Instagram();
 		try {
 			$instagram->login($user->name, $user->password);
-		} catch (\Exception $e) {
-			echo 'Something went wrong: '.$e->getMessage()."\n";
-			exit(0);
+		} catch (\Exception $exception) {
+			throw $exception;
 		}
 
 		return $instagram;
@@ -55,9 +67,10 @@ class InstagramFeed implements InstagramFeedInterface
 	/**
 	 * Get account feed
 	 *
-	 * @param $instagram
-	 * @param $accountName
+	 * @param $instagram Instagram
+	 * @param $accountName string
 	 * @return \Illuminate\Support\Collection|static
+	 * @throws \Exception
 	 */
 	protected function getUserFeed ($instagram, $accountName)
 	{
@@ -82,8 +95,8 @@ class InstagramFeed implements InstagramFeedInterface
 				// Instagram will throttle you temporarily for abusing their API!
 				sleep(self::SLEEP);
 			} while ($maxId !== null); // Must use "!==" for comparison instead of "!=".
-		} catch (\Exception $e) {
-			echo 'Something went wrong: '.$e->getMessage()."\n";
+		} catch (\Exception $exception) {
+			throw $exception;
 		}
 
 		return $items;
@@ -99,9 +112,9 @@ class InstagramFeed implements InstagramFeedInterface
 	{
 		return $items->map(function(Item $item) {
 			return [
-				'id' => $item->getId(),
+				'id'         => $item->getId(),
 				'media_type' => $item->getMediaType(),
-				'medias' => $this->getMediaCollection($item),
+				'medias'     => $this->getMediaCollection($item),
 			];
 		});
 	}
@@ -110,9 +123,10 @@ class InstagramFeed implements InstagramFeedInterface
 	 * Chose prepared method to get media from feed item
 	 *
 	 * @param Item $item
-	 * @return array|\InstagramAPI\Response\Model\VideoVersions[]|string
+	 * @return array|\InstagramAPI\Response\Model\VideoVersions[]
+	 * @throws \Exception
 	 */
-	protected function getMediaCollection(Item $item)
+	protected function getMediaCollection (Item $item)
 	{
 		switch ($item->getMediaType()) {
 			case Item::PHOTO:
@@ -125,7 +139,7 @@ class InstagramFeed implements InstagramFeedInterface
 				$medias = $this->prepareVideo($item);
 				break;
 			default:
-				return 'Undefined media type';
+				throw new \Exception('Undefined media type');
 		}
 
 		return $medias;
@@ -135,7 +149,7 @@ class InstagramFeed implements InstagramFeedInterface
 	 * @param Item $item
 	 * @return array
 	 */
-	protected function preparePhoto(Item $item)
+	protected function preparePhoto (Item $item)
 	{
 		return [$item->image_versions2->candidates];
 	}
@@ -144,7 +158,7 @@ class InstagramFeed implements InstagramFeedInterface
 	 * @param Item $item
 	 * @return array
 	 */
-	protected function prepareAlbum(Item $item)
+	protected function prepareAlbum (Item $item)
 	{
 		$medias = [];
 
@@ -159,7 +173,7 @@ class InstagramFeed implements InstagramFeedInterface
 	 * @param Item $item
 	 * @return \InstagramAPI\Response\Model\VideoVersions[]
 	 */
-	protected function prepareVideo(Item $item)
+	protected function prepareVideo (Item $item)
 	{
 		return $item->video_versions;
 	}
@@ -168,11 +182,21 @@ class InstagramFeed implements InstagramFeedInterface
 	 * Get studio feed
 	 *
 	 * @return mixed
+	 * @throws \Exception
 	 */
-	public function get()
+	public function get ()
 	{
-		$items = $this->getUserFeed($this->login(), self::STUDIO);
+		try {
+			$items = $this->getUserFeed($this->login(), self::STUDIO);
+		} catch (\Exception $exception) {
+			throw $exception;
+		}
 
-		return $this->makeFeedCollection($items);
+		$feed = $this->makeFeedCollection($items);
+
+		if ($feed->isEmpty())
+			throw new \Exception('Feed is empty');
+
+		return $feed;
 	}
 }
