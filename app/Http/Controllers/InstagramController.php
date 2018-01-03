@@ -37,7 +37,9 @@ class InstagramController extends Controller
 	{
 		return Cache::remember('test', '10', function() {
 			return $this->instagramFeed->get();
-		})->forPage($request->page, $request->on_page)->values();
+		})
+					->forPage($request->page, $request->on_page)
+					->values();
 	}
 
 	/**
@@ -91,6 +93,4 @@ class InstagramController extends Controller
 		}
 
 	}
-
-	//ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8IA9AljSZMP6aVc8HNqXs81fkqmL1NGDJW7gz0s7VZftFo7zmV3gDy8ruuZQD58Jex2VHdlw2y9jRPb4oW6/5axYBrha9rTiw+g4ALw/bjoFiH2pDiNLArJrWsv7pnz96MzHR1eohBM01r6rxcuVrjVDOeTF1RVkPGYen+20jMPUMdUk+C65Ly05OZu+eSgtE84BV8P5E4vE4E1ISf4Vg/Gj1PeHBxeZsXy3h9h7Br7UkhBmGkdVlOheVsiM4vrSJV1Qi+OsMBTElKRjA5r+S9pUx/MkQ8Xq+ePe68vWd25DMtXROaAvFLkBVbnPBqQxqtsqyZ4r4Rdkj8PnmB10OkZ2p2PWmuVEpFeBoJ7ySwBpUWiIQdflXPz4h5RO2z1p5Sr5EWy7mJYY55tMuXntzztRjlBoCZ36B7phXVaz0vH6tZ24xdojA5AawcOEYqQWOjx2/rD8aWUHfCz2EiLOU1FSO6GBopQmbJ2OAg2cQc+QygZfuMPKNZFr96JNFYbZFgEZYSnL6cUJZu5vjdHxRUHqB/7gcRHwAspuEphfYGrVu+yP2arh2wCbvtZzmgj9ptYE19BY4kpQ6OO7HwFVWuhl9vZX+UoMVTc5Gff91Ixs+jUE7HNNN8iWf55UwJN4zJ6rbk9eMsSkIx+daWHL8Rc5XM/bFp/cFgKAELkST5Q== sergeymikolob@gmail.com
 }

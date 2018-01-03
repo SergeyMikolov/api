@@ -6,7 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class BotAccount
+ *
  * @package App\Models
+ * @property int $id
+ * @property string $name
+ * @property string $password
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BotAccount whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BotAccount whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BotAccount whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BotAccount wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\BotAccount whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class BotAccount extends Model
 {

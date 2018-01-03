@@ -22,12 +22,19 @@ class InstagramFeed implements InstagramFeedInterface
 	 */
 	const SLEEP = 1;
 
+	/**
+	 * Get random instagram bot's login data
+	 *
+	 * @return \Illuminate\Database\Eloquent\Model|null|static
+	 */
 	protected function getUserData ()
 	{
-		dd( BotAccount::inRandomOrder()->first());
+		return BotAccount::inRandomOrder()->first();
 	}
 
 	/**
+	 * Get logged instagram model
+	 *
 	 * @return Instagram
 	 */
 	protected function login ()
@@ -46,17 +53,20 @@ class InstagramFeed implements InstagramFeedInterface
 	}
 
 	/**
-	 * @param $instagram Instagram
+	 * Get account feed
+	 *
+	 * @param $instagram
+	 * @param $accountName
 	 * @return \Illuminate\Support\Collection|static
 	 */
-	protected function getUserFeed ($instagram)
+	protected function getUserFeed ($instagram, $accountName)
 	{
 		// Starting at "null" means starting at the first page.
 		$maxId = null;
 		$items = collect();
 		try {
-			// Get the UserPK ID for "anastasiyaeroshkina_poledance".
-			$userId = $instagram->people->getUserIdForName(self::STUDIO);
+			// Get the UserPK ID from name.
+			$userId = $instagram->people->getUserIdForName($accountName);
 			do {
 				// Request the page corresponding to maxId.
 				$response = $instagram->timeline->getUserFeed($userId, $maxId);
@@ -80,6 +90,8 @@ class InstagramFeed implements InstagramFeedInterface
 	}
 
 	/**
+	 * Prepare feed collection
+	 *
 	 * @param $items \Illuminate\Support\Collection|static
 	 * @return mixed
 	 */
@@ -95,6 +107,8 @@ class InstagramFeed implements InstagramFeedInterface
 	}
 
 	/**
+	 * Chose prepared method to get media from feed item
+	 *
 	 * @param Item $item
 	 * @return array|\InstagramAPI\Response\Model\VideoVersions[]|string
 	 */
@@ -151,11 +165,13 @@ class InstagramFeed implements InstagramFeedInterface
 	}
 
 	/**
+	 * Get studio feed
+	 *
 	 * @return mixed
 	 */
 	public function get()
 	{
-		$items = $this->getUserFeed($this->login());
+		$items = $this->getUserFeed($this->login(), self::STUDIO);
 
 		return $this->makeFeedCollection($items);
 	}
