@@ -36,7 +36,7 @@ class InstagramController extends Controller
 	 */
 	public function get (InstagramFeedRequest $request)
 	{
-		Cache::delete('test');
+
 		try {
 			return Cache::remember('test', $this->instagramFeed::CACHETIME, function() {
 				return $this->instagramFeed->get();
