@@ -37,7 +37,7 @@ class InstagramController extends Controller
 	public function get (InstagramFeedRequest $request)
 	{
 		try {
-			return Cache::remember('test', $this->instagramFeed::CACHETIME, function() {
+			return Cache::remember('i_feed', $this->instagramFeed::CACHETIME, function() {
 				return $this->instagramFeed->get();
 			})
 						->forPage($request->page, $request->on_page)
@@ -45,8 +45,8 @@ class InstagramController extends Controller
 		} catch (\Exception $exception) {
 
 			\Log::error($exception->getMessage(), [
-				'file' => $exception->getFile(),
-				'line' => $exception->getLine(),
+				'file'  => $exception->getFile(),
+				'line'  => $exception->getLine()
 			]);
 
 			return Response::make([

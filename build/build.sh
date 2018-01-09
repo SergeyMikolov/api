@@ -19,10 +19,10 @@ if $ENV_DEV; then
 
     cd "$path/dev" && docker-compose -p studio_dev build
 
-    docker run --rm --interactive --tty \
-        --volume "$project_dir":/app \
-        --volume ~/.ssh/:/root/.ssh \
-        composer install
+   # docker run --rm --interactive --tty \
+       # --volume "$project_dir":/app \
+       # --volume ~/.ssh/:/root/.ssh \
+        #composer install
 
 elif $ENV_TEST; then
     cp "$path/.tests.env" "$project_dir/.env"

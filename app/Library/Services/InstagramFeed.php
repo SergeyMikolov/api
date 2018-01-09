@@ -26,7 +26,7 @@ class InstagramFeed implements InstagramFeedInterface
 	/**
 	 * Cache time in minutes
 	 */
-	const CACHETIME = 10;
+	const CACHETIME = 60;
 
 	/**
 	 * Get random instagram bot's login data
