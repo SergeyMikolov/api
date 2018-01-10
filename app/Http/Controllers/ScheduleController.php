@@ -6,6 +6,10 @@ use Cache;
 use Illuminate\Http\Request;
 use App\Library\Services\InstagramFeed;
 
+/**
+ * Class ScheduleController
+ * @package App\Http\Controllers
+ */
 class ScheduleController extends Controller
 {
 	/**
@@ -22,14 +26,22 @@ class ScheduleController extends Controller
 		$this->instagramFeed = $instagramFeed;
 	}
 
-	private function keyCheck(Request $request)
+	/**
+	 * @param Request $request
+	 * @return bool
+	 */
+	private static function keyCheck(Request $request)
 	{
 		return $request->key === env('CRON_KEY');
 	}
 
-    public function instagramFeedUpdate(Request $request)
+	/**
+	 * @param Request $request
+	 * @return string
+	 */
+	public function instagramFeedUpdate(Request $request)
 	{
-		if ($this->keyCheck($request))
+		if (self::keyCheck($request))
 			try {
 
 				$instagramFeed = $this->instagramFeed->get();

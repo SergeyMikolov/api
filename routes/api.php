@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'schedule'], function() {
 	Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
 });
+
+Route::get('/instagram', 'InstagramController@get');
