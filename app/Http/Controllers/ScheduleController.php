@@ -46,7 +46,7 @@ class ScheduleController extends Controller
 
 				$instagramFeed = $this->instagramFeed->get();
 
-				Cache::put('i_feed', $instagramFeed, $this->instagramFeed::CACHETIME);
+				Cache::put('i_feed', $instagramFeed, $this->instagramFeed::CACHETIME - 2);
 
 				return 'success';
 
