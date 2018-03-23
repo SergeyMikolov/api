@@ -9,8 +9,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $name
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereName($value)
+ * @property string $description
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereDescription( $value )
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereId( $value )
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereName( $value )
  * @mixin \Eloquent
  */
 class GroupType extends Model
@@ -36,6 +38,7 @@ class GroupType extends Model
 	 */
 	protected $fillable = [
 		'name',
+		'description',
 	];
 
 	/**
@@ -44,6 +47,6 @@ class GroupType extends Model
 	 * @var array
 	 */
 	protected $hidden = [
-		'id'
+		'id',
 	];
 }
