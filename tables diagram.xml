@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- SQL XML created by WWW SQL Designer, https://github.com/ondras/wwwsqldesigner/ -->
+<!-- Active URL: http://ondras.zarovi.cz/sql/demo/ -->
+<sql>
+    <datatypes db="mysql">
+        <group label="Numeric" color="rgb(238,238,170)">
+            <type label="Integer" length="0" sql="INTEGER" quote=""/>
+            <type label="TINYINT" length="0" sql="TINYINT" quote=""/>
+            <type label="SMALLINT" length="0" sql="SMALLINT" quote=""/>
+            <type label="MEDIUMINT" length="0" sql="MEDIUMINT" quote=""/>
+            <type label="INT" length="0" sql="INT" quote=""/>
+            <type label="BIGINT" length="0" sql="BIGINT" quote=""/>
+            <type label="Decimal" length="1" sql="DECIMAL" re="DEC" quote=""/>
+            <type label="Single precision" length="0" sql="FLOAT" quote=""/>
+            <type label="Double precision" length="0" sql="DOUBLE" re="DOUBLE" quote=""/>
+        </group>
+
+        <group label="Character" color="rgb(255,200,200)">
+            <type label="Char" length="1" sql="CHAR" quote="'"/>
+            <type label="Varchar" length="1" sql="VARCHAR" quote="'"/>
+            <type label="Text" length="0" sql="MEDIUMTEXT" re="TEXT" quote="'"/>
+            <type label="Binary" length="1" sql="BINARY" quote="'"/>
+            <type label="Varbinary" length="1" sql="VARBINARY" quote="'"/>
+            <type label="BLOB" length="0" sql="BLOB" re="BLOB" quote="'"/>
+        </group>
+
+        <group label="Date &amp; Time" color="rgb(200,255,200)">
+            <type label="Date" length="0" sql="DATE" quote="'"/>
+            <type label="Time" length="0" sql="TIME" quote="'"/>
+            <type label="Datetime" length="0" sql="DATETIME" quote="'"/>
+            <type label="Year" length="0" sql="YEAR" quote=""/>
+            <type label="Timestamp" length="0" sql="TIMESTAMP" quote="'"/>
+        </group>
+
+        <group label="Miscellaneous" color="rgb(200,200,255)">
+            <type label="ENUM" length="1" sql="ENUM" quote=""/>
+            <type label="SET" length="1" sql="SET" quote=""/>
+            <type label="Bit" length="0" sql="bit" quote=""/>
+        </group>
+    </datatypes><table x="800" y="364" name="groups">
+    <row name="id" null="1" autoincrement="1">
+        <datatype>INTEGER</datatype>
+        <default>NULL</default></row>
+    <row name="type_id" null="0" autoincrement="0">
+        <datatype>INTEGER</datatype>
+        <default>NULL</default><relation table="group_types" row="id" />
+    </row>
+    <row name="trainer_id" null="0" autoincrement="0">
+        <datatype>INTEGER</datatype>
+        <default>NULL</default><relation table="user" row="id" />
+    </row>
+    <row name="day_id" null="0" autoincrement="0">
+        <datatype>INTEGER</datatype>
+        <default>NULL</default><relation table="days" row="id" />
+    </row>
+    <row name="time" null="0" autoincrement="0">
+        <datatype>TIME</datatype>
+        <default>'NULL'</default></row>
+    <row name="capacity" null="0" autoincrement="0">
+        <datatype>INTEGER</datatype>
+        <default>NULL</default><comment>количество мест в группе</comment>
+    </row>
+    <row name="max_capacity" null="0" autoincrement="0">
+        <datatype>INTEGER</datatype>
+        <default>NULL</default><comment>максимальное количество человек в группе</comment>
+    </row>
+    <row name="is_active" null="0" autoincrement="0">
+        <datatype>bit</datatype>
+        <default>true</default><comment>активна ли группа на данный момент</comment>
+    </row>
+    <key type="PRIMARY" name="">
+        <part>id</part>
+    </key>
+    <comment>группы</comment>
+</table>
+    <table x="464" y="378" name="user">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user_group" row="user_id" />
+            <relation table="user_group_type" row="user_id" />
+        </row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+    </table>
+    <table x="1047" y="404" name="days">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="name" null="0" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>'NULL'</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+        <comment>дни недели</comment>
+    </table>
+    <table x="496" y="251" name="user_group">
+        <row name="user_id" null="0" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="group_id" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="groups" row="id" />
+        </row>
+        <key type="PRIMARY" name="">
+            <part>user_id</part>
+        </key>
+        <comment>привязка учениц к группам</comment>
+    </table>
+    <table x="127" y="252" name="payments">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="user_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="subscription_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="subscriptions" row="id" />
+        </row>
+        <row name="creator_id" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="created_at" null="1" autoincrement="0">
+            <datatype>TIMESTAMP</datatype>
+            <default>NULL</default></row>
+        <row name="updated_at" null="1" autoincrement="0">
+            <datatype>TIMESTAMP</datatype>
+            <default>NULL</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+        <comment>проплаты</comment>
+    </table>
+    <table x="364" y="581" name="users_data">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="user_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="lessons left" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="created_at" null="1" autoincrement="0">
+            <datatype>TIMESTAMP</datatype>
+            <default>NULL</default></row>
+        <row name="updated_at" null="0" autoincrement="0">
+            <datatype>TIMESTAMP</datatype>
+            <default>'NULL'</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+        <comment>баланс ученицы</comment>
+    </table>
+    <table x="719" y="612" name="users_activity">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="user_id" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="group_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="groups" row="id" />
+        </row>
+        <row name="trainer_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="present" null="0" autoincrement="0">
+            <datatype>bit</datatype>
+            <default>NULL</default></row>
+        <row name="creator_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="created_at" null="1" autoincrement="0">
+            <datatype>TIMESTAMP</datatype>
+            <default>NULL</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+        <comment>активность ученицы</comment>
+    </table>
+    <table x="815" y="248" name="group_types">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="name" null="0" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>'NULL'</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+    </table>
+    <table x="824" y="153" name="user_group_type">
+        <row name="user_id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="group_type_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="group_types" row="id" />
+        </row>
+        <key type="PRIMARY" name="">
+            <part>user_id</part>
+        </key>
+        <comment>Тренер и группы которые он может вести</comment>
+    </table>
+    <table x="349" y="101" name="subscriptions">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="subscription_type_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="subscription_types" row="id" />
+        </row>
+        <row name="group_type_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="group_types" row="id" />
+        </row>
+        <row name="price" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+    </table>
+    <table x="614" y="50" name="subscription_types">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="name" null="1" autoincrement="0">
+            <datatype>ENUM</datatype>
+            <default>NULL</default></row>
+        <row name="lessons_count" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+    </table>
+</sql>
