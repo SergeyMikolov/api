@@ -37,7 +37,7 @@
             <type label="SET" length="1" sql="SET" quote=""/>
             <type label="Bit" length="0" sql="bit" quote=""/>
         </group>
-    </datatypes><table x="800" y="364" name="groups">
+    </datatypes><table x="971" y="396" name="groups">
     <row name="id" null="1" autoincrement="1">
         <datatype>INTEGER</datatype>
         <default>NULL</default></row>
@@ -83,7 +83,7 @@
             <part>id</part>
         </key>
     </table>
-    <table x="1047" y="404" name="days">
+    <table x="1198" y="405" name="days">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
@@ -108,7 +108,7 @@
         </key>
         <comment>привязка учениц к группам</comment>
     </table>
-    <table x="127" y="252" name="payments">
+    <table x="108" y="307" name="payments">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
@@ -135,7 +135,7 @@
         </key>
         <comment>проплаты</comment>
     </table>
-    <table x="364" y="581" name="users_data">
+    <table x="410" y="588" name="users_data">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
@@ -157,7 +157,7 @@
         </key>
         <comment>баланс ученицы</comment>
     </table>
-    <table x="719" y="612" name="users_activity">
+    <table x="727" y="557" name="users_activity">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
@@ -173,7 +173,7 @@
             <datatype>INTEGER</datatype>
             <default>NULL</default><relation table="user" row="id" />
         </row>
-        <row name="present" null="0" autoincrement="0">
+        <row name="is_present" null="0" autoincrement="0">
             <datatype>bit</datatype>
             <default>NULL</default></row>
         <row name="creator_id" null="1" autoincrement="0">
@@ -188,18 +188,21 @@
         </key>
         <comment>активность ученицы</comment>
     </table>
-    <table x="815" y="248" name="group_types">
+    <table x="955" y="249" name="group_types">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
         <row name="name" null="0" autoincrement="0">
             <datatype>VARCHAR</datatype>
             <default>'NULL'</default></row>
+        <row name="descriprion" null="1" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>NULL</default></row>
         <key type="PRIMARY" name="">
             <part>id</part>
         </key>
     </table>
-    <table x="824" y="153" name="user_group_type">
+    <table x="912" y="127" name="user_group_type">
         <row name="user_id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
@@ -236,7 +239,10 @@
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
         <row name="name" null="1" autoincrement="0">
-            <datatype>ENUM</datatype>
+            <datatype>VARCHAR</datatype>
+            <default>NULL</default></row>
+        <row name="description" null="1" autoincrement="0">
+            <datatype>VARCHAR</datatype>
             <default>NULL</default></row>
         <row name="lessons_count" null="0" autoincrement="0">
             <datatype>INTEGER</datatype>
