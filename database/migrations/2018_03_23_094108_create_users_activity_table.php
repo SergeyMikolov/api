@@ -44,9 +44,9 @@ class CreateUsersActivityTable extends Migration
 				  ->references('id')
 				  ->on('users')
 				  ->onDelete('cascade');
-
-			DB::statement("COMMENT ON TABLE users_activity IS 'People activity in groups'");
         });
+
+		DB::statement("COMMENT ON TABLE users_activity IS 'People activity in groups'");
     }
 
     /**

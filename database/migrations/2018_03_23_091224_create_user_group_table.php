@@ -29,9 +29,9 @@ class CreateUserGroupTable extends Migration
 				  ->references('id')
 				  ->on('users')
 				  ->onDelete('cascade');
-
-			B::statement("COMMENT ON TABLE user_group IS 'Relation between people and groups that he is study in");
         });
+
+		DB::statement("COMMENT ON TABLE user_group IS 'Relation between people and groups that he is study in'");
     }
 
     /**
