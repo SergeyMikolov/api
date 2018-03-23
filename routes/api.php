@@ -21,3 +21,9 @@ Route::group([ 'middleware'=>'api'], function () {
     Route::get('media', 'InstagramController@getMedia');
     Route::get('/', 'InstagramController@get');
 });
+
+Route::group(['prefix' => 'schedule'], function() {
+	Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
+});
+
+Route::get('/instagram', 'InstagramController@get');

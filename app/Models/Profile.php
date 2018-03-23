@@ -4,6 +4,35 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Profile
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $theme_id
+ * @property string|null $location
+ * @property string|null $bio
+ * @property string|null $twitter_username
+ * @property string|null $github_username
+ * @property string|null $avatar
+ * @property bool $avatar_status
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\Theme $theme
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereAvatarStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereGithubUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereThemeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereTwitterUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Profile whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Profile extends Model
 {
     /**
