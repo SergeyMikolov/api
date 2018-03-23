@@ -163,4 +163,13 @@ class User extends Authenticatable
     {
         return $this->profiles()->detach($profile);
     }
+
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function groupTypes ()
+	{
+		return $this->belongsToMany(GroupType::class, 'user_group_type',
+			'user_id', 'group_type_id');
+	}
 }

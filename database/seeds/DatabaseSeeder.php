@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
         $this->call(BotAccountsSeeder::class);
         $this->call(DaysTableSeeder::class);
 
+        # tests
+        $this->call(GroupTypesSeeder::class);
+        $this->call(SubscriptionsTypesSeeder::class);
+
         Model::reguard();
     }
 }

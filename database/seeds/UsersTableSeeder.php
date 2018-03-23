@@ -18,6 +18,8 @@ class UsersTableSeeder extends Seeder
         $profile = new Profile();
         $adminRole = Role::whereName('Admin')->first();
         $userRole = Role::whereName('User')->first();
+        $trainerRole = Role::whereName('Trainer')->first();
+        $apprenticeRole = Role::whereName('Apprentice')->first();
 
         // Seed test admin
         $seededAdminEmail = 'admin@admin.com';
@@ -59,6 +61,65 @@ class UsersTableSeeder extends Seeder
             $user->attachRole($userRole);
             $user->save();
         }
+
+		// Seed  test trainer
+		$user = User::where('email', '=', 'trainer@user.com')->first();
+		if ($user === null) {
+			$user = User::create([
+				'name'                           => $faker->userName,
+				'first_name'                     => $faker->firstName,
+				'last_name'                      => $faker->lastName,
+				'email'                          => 'trainer@user.com',
+				'password'                       => Hash::make('password'),
+				'token'                          => str_random(64),
+				'activated'                      => true,
+				'signup_ip_address'              => $faker->ipv4,
+				'signup_confirmation_ip_address' => $faker->ipv4,
+			]);
+
+			$user->profile()->save(new Profile());
+			$user->attachRole($trainerRole);
+			$user->save();
+		}
+
+		// Seed  test Apprentice
+		$user = User::where('email', '=', 'apprentice1@user.com')->first();
+		if ($user === null) {
+			$user = User::create([
+				'name'                           => $faker->userName,
+				'first_name'                     => $faker->firstName,
+				'last_name'                      => $faker->lastName,
+				'email'                          => 'apprentice1@user.com',
+				'password'                       => Hash::make('password'),
+				'token'                          => str_random(64),
+				'activated'                      => true,
+				'signup_ip_address'              => $faker->ipv4,
+				'signup_confirmation_ip_address' => $faker->ipv4,
+			]);
+
+			$user->profile()->save(new Profile());
+			$user->attachRole($apprenticeRole);
+			$user->save();
+		}
+
+		$user = User::where('email', '=', 'apprentice2@user.com')->first();
+		if ($user === null) {
+			$user = User::create([
+				'name'                           => $faker->userName,
+				'first_name'                     => $faker->firstName,
+				'last_name'                      => $faker->lastName,
+				'email'                          => 'apprentice2@user.com',
+				'password'                       => Hash::make('password'),
+				'token'                          => str_random(64),
+				'activated'                      => true,
+				'signup_ip_address'              => $faker->ipv4,
+				'signup_confirmation_ip_address' => $faker->ipv4,
+			]);
+
+			$user->profile()->save(new Profile());
+			$user->attachRole($apprenticeRole);
+			$user->save();
+		}
 
         // Seed test users
         // $user = factory(App\Models\Profile::class, 5)->create();

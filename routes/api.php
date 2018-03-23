@@ -27,3 +27,15 @@ Route::group(['prefix' => 'schedule'], function() {
 });
 
 Route::get('/instagram', 'InstagramController@get');
+
+Route::get('/test', function() {
+
+	$user = \App\Models\User::whereHas('roles', function($query) {
+		$query->whereName('Trainer');
+	})->first();
+	$groupType = \App\Models\GroupType::firstOrFail();
+//	$user->groupTypes()->attach($groupType->id);
+//	$user->groupTypes()->attach($groupType->id);
+	dd($user->groupTypes->toArray());
+
+});

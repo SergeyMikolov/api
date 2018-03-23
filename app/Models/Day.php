@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\Day
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Day whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Day whereName($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Group $groups
  */
 class Day extends Model
 {
@@ -67,4 +69,12 @@ class Day extends Model
 	protected $hidden = [
 		'id'
 	];
+
+	/**
+	 * @return HasOne
+	 */
+	public function groups () : HasOne
+	{
+		return $this->hasOne(Group::class, 'day_id');
+	}
 }

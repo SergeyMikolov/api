@@ -21,7 +21,7 @@ class CreateGroupsTable extends Migration
 			$table->integer('group_type_id')->comment            = 'Group type';
 			$table->integer('trainer_id')->comment               = 'trainer id';
 			$table->integer('day_id')->comment                   = 'day id';
-			$table->timestamp('training_time')->comment          = 'training time of the day';
+			$table->time('training_time')->comment               = 'training time of the day';
 			$table->integer('capacity')->comment                 = 'current group capacity';
 			$table->integer('max_capacity')->comment             = 'max group capacity';
 			$table->boolean('is_active')->default(true)->comment = 'group is active';

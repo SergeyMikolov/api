@@ -29,6 +29,8 @@ class CreateUserGroupTypeTable extends Migration
 				  ->references('id')
 				  ->on('users')
 				  ->onDelete('cascade');
+
+			$table->unique('user_id', 'group_type_id');
         });
 
 		DB::statement("COMMENT ON TABLE user_group_type IS 'Relation between trainer and groups that he can lead'");
