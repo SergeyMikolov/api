@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ThemesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(BotAccountsSeeder::class);
+        $this->call(DaysTableSeeder::class);
 
         Model::reguard();
     }

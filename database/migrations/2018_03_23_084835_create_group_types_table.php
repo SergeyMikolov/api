@@ -9,28 +9,29 @@ use Illuminate\Database\Migrations\Migration;
  */
 class CreateGroupTypesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('group_types', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name')->unique()->comment = 'group name';
-        });
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up ()
+	{
+		Schema::create('group_types', function(Blueprint $table) {
+			$table->increments('id');
+			$table->string('name')->unique()->comment        = 'group name';
+			$table->string('description')->unique()->comment = 'group description';
+		});
 
 		DB::statement("COMMENT ON TABLE group_types IS 'Table with group types names'");
-    }
+	}
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('group_types');
-    }
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down ()
+	{
+		Schema::dropIfExists('group_types');
+	}
 }

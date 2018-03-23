@@ -26,6 +26,7 @@ Thumbs.db
 ### DIFFERENT TYPE OF MASTER CONFIGS ###
 .env
 composer.lock
+_ide_helper.php
 
 ### ASSET EXCLUSIONS ###
 /node_modules

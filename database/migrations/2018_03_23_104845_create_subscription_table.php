@@ -16,7 +16,7 @@ class CreateSubscriptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscription', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('subscription_type_id');
             $table->integer('group_type_id');
@@ -33,7 +33,7 @@ class CreateSubscriptionTable extends Migration
 				  ->onDelete('cascade');
         });
 
-		DB::statement("COMMENT ON TABLE subscription IS 'Table with subscriptions, its type and price'");
+		DB::statement("COMMENT ON TABLE subscriptions IS 'Table with subscriptions, its type and price'");
     }
 
     /**
@@ -43,6 +43,6 @@ class CreateSubscriptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscription');
+        Schema::dropIfExists('subscriptions');
     }
 }

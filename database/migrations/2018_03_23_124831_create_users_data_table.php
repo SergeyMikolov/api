@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateUserGroupTable
+ * Class CreateUsersDataTable
  */
-class CreateUserGroupTable extends Migration
+class CreateUsersDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,22 +16,17 @@ class CreateUserGroupTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_group', function (Blueprint $table) {
+        Schema::create('users_data', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id');
-            $table->integer('group_id');
-
-			$table->foreign('group_id')
-				  ->references('id')
-				  ->on('groups')
-				  ->onDelete('cascade');
+            $table->integer('lessons_left');
+            $table->timestamps();
 
 			$table->foreign('user_id')
 				  ->references('id')
 				  ->on('users')
 				  ->onDelete('cascade');
         });
-
-		DB::statement("COMMENT ON TABLE user_group IS 'Relation between people and groups that he is study in'");
     }
 
     /**
@@ -41,6 +36,6 @@ class CreateUserGroupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_group');
+        Schema::dropIfExists('users_data');
     }
 }
