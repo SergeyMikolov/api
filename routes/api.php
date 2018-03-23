@@ -32,7 +32,8 @@ Route::get('/test', function() {
 
 	$user = \App\Models\User::whereHas('roles', function($query) {
 		$query->whereName('Trainer');
-	})->first();
+	})
+							->first();
 	$groupType = \App\Models\GroupType::firstOrFail();
 //	$user->groupTypes()->attach($groupType->id);
 //	$user->groupTypes()->attach($groupType->id);
