@@ -19,7 +19,9 @@ class CreateGroupTypesTable extends Migration
 		Schema::create('group_types', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('name')->unique()->comment        = 'group name';
-			$table->string('description')->unique()->comment = 'group description';
+			$table->string('description')->comment = 'group description';
+			$table->string('requirements')->comment = 'group requirements';
+			$table->string('duration')->comment = 'group lesson duration';
 		});
 
 		DB::statement("COMMENT ON TABLE group_types IS 'Table with group types names'");
