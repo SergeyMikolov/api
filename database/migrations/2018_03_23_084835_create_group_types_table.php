@@ -22,6 +22,8 @@ class CreateGroupTypesTable extends Migration
 			$table->string('description')->comment = 'group description';
 			$table->string('requirements')->comment = 'group requirements';
 			$table->string('duration')->comment = 'group lesson duration';
+			$table->boolean('display')->comment = 'display or not';
+			$table->integer('display_order')->unique()->comment = 'display order';
 		});
 
 		DB::statement("COMMENT ON TABLE group_types IS 'Table with group types names'");
