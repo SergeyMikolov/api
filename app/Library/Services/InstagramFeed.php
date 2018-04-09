@@ -16,7 +16,7 @@ class InstagramFeed implements InstagramFeedInterface
 	/**
 	 * studio name
 	 */
-	const STUDIO = 'anastasiyaeroshkina_poledance';
+	const STUDIO = 'rock_n_pole';
 
 	/**
 	 * sleep time
@@ -27,6 +27,11 @@ class InstagramFeed implements InstagramFeedInterface
 	 * Cache time in minutes
 	 */
 	const CACHETIME = 60;
+
+	/**
+	 * Api url to get embeded instagram media
+	 */
+	const EMBED_ENDPOINT = 'https://api.instagram.com/oembed/?url=';
 
 	/**
 	 * Get random instagram bot's login data
@@ -110,11 +115,20 @@ class InstagramFeed implements InstagramFeedInterface
 	 */
 	protected function makeFeedCollection ($items)
 	{
-		return $items->map(function(Item $item) {
+		$httpClient = HttpClient::getHttpClient();
+
+		return $items->map(function(Item $item)use($httpClient) {
+			$embedUrl = self::EMBED_ENDPOINT . $item->getItemUrl();
+
+			$response = $httpClient->request('GET', $embedUrl)
+								   ->getBody()
+								   ->getContents();
+//			dd(preg_replace('/<script [\w\d\s=\"\/\.]+><\/script>/', '', json_decode($response)->html));
 			return [
 				'id'         => $item->getId(),
 				'media_type' => $item->getMediaType(),
-				'medias'     => $this->getMediaCollection($item),
+				'embed'      => preg_replace('/<script [\w\d\s=\"\/\.]+><\/script>/', '', json_decode($response)->html),
+				'preview'    => $this->getMediaCollection($item),
 			];
 		});
 	}
@@ -147,26 +161,29 @@ class InstagramFeed implements InstagramFeedInterface
 
 	/**
 	 * @param Item $item
-	 * @return array
+	 * @return string
 	 */
 	protected function preparePhoto (Item $item)
 	{
-		return [$item->image_versions2->candidates];
+//		return [$item->image_versions2->candidates];
+		return end($item->image_versions2->candidates)->url;
 	}
 
 	/**
 	 * @param Item $item
-	 * @return array
+	 * @return string
 	 */
 	protected function prepareAlbum (Item $item)
 	{
-		$medias = [];
-
-		foreach ($item->carousel_media as $media) {
-			$medias[] = $media->image_versions2->candidates;
-		}
-
-		return $medias;
+		$medias = array_shift($item->carousel_media)->image_versions2->candidates;
+		return end($medias)->url;
+//		$medias = [];
+//
+//		foreach ($item->carousel_media as $media) {
+//			$medias[] = $media->image_versions2->candidates;
+//		}
+//
+//		return $medias;
 	}
 
 	/**
@@ -175,7 +192,8 @@ class InstagramFeed implements InstagramFeedInterface
 	 */
 	protected function prepareVideo (Item $item)
 	{
-		return $item->video_versions;
+		return end($item->image_versions2->candidates)->url;
+//		return $item->video_versions;
 	}
 
 	/**

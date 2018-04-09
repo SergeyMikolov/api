@@ -20,6 +20,7 @@ class CreateGroupTypesTable extends Migration
 			$table->increments('id');
 			$table->string('name')->unique()->comment        = 'group name';
 			$table->string('description')->comment = 'group description';
+			$table->string('img')->comment = 'img url';
 			$table->string('requirements')->comment = 'group requirements';
 			$table->string('duration')->comment = 'group lesson duration';
 			$table->boolean('display')->comment = 'display or not';
