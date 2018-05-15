@@ -198,6 +198,12 @@
         <row name="descriprion" null="1" autoincrement="0">
             <datatype>VARCHAR</datatype>
             <default>NULL</default></row>
+        <row name="requirements" null="1" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>NULL</default></row>
+        <row name="duration" null="1" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>NULL</default></row>
         <key type="PRIMARY" name="">
             <part>id</part>
         </key>

@@ -14,6 +14,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereName($value)
  * @mixin \Eloquent
+ * @property string $img
+ * @property string $requirements
+ * @property string $duration
+ * @property bool $display
+ * @property int $display_order
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereDisplay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereImg($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereRequirements($value)
  */
 class GroupType extends Model
 {
