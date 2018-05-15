@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 Route::group([ 'middleware'=>'api'], function () {
 
 	Route::group([ 'prefix'=>'auth'], function () {
-
+//adawd
 		Route::post('signup', 'AuthController@register');
 		Route::post('login', 'AuthController@login');
 		Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh');
