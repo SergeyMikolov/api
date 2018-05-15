@@ -58,6 +58,7 @@ use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\GroupType[] $groupTypes
  */
 class User extends Authenticatable
 {

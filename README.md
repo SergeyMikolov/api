@@ -728,3 +728,5 @@ laravel-auth
 
 ### Laravel Auth License
 Laravel-auth is licensed under the MIT license. Enjoy!
+
+Go to JWTGenerateCommand.php file located in vendor/tymon/src/Commands and paste this part of code public function handle() { $this->fire(); }
