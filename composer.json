@@ -10,7 +10,7 @@
         "barryvdh/laravel-ide-helper": "^2.4",
         "creativeorange/gravatar": "~1.0",
         "doctrine/dbal": "^2.5",
-        "fideloper/proxy": "~3.3",
+        "fideloper/proxy": "~4.0",
         "google/recaptcha": "^1.1",
         "intervention/image": "^2.4",
         "jaybizzle/laravel-crawler-detect": "1.*",
@@ -19,7 +19,7 @@
         "jeremykenedy/laravel-logger": "^1.0.0",
         "jeremykenedy/laravel-roles": "^1.1",
         "jeremykenedy/uuid": "^3.1",
-        "laravel/framework": "5.5.*",
+        "laravel/framework": "5.6.*",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.5",
@@ -38,7 +38,7 @@
         "filp/whoops": "~2.0",
         "fzaninotto/faker": "~1.7",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~6.3"
+        "phpunit/phpunit": "~7.0"
     },
     "autoload": {
         "classmap": [
