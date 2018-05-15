@@ -32,7 +32,7 @@ Route::group([ 'middleware'=>'api'], function () {
 			Route::post('logout', 'AuthController@logout');
 		});
 	});
-
+//111
 	Route::get('media', 'InstagramController@getMedia');
     Route::get('/', 'InstagramController@get');
 });
