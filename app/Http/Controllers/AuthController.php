@@ -47,7 +47,9 @@ class AuthController extends Controller
 
 	public function user ()
 	{
+		/** @var User $user */
 		$user = User::find(Auth::user()->id);
+		$user->avatar = $user->profile->avatar;
 
 		return response([
 			'status' => 'success',
