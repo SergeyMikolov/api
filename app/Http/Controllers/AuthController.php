@@ -8,35 +8,43 @@ use Auth;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-
+/**
+ * Class AuthController
+ * @package App\Http\Controllers
+ */
 class AuthController extends Controller
 {
+	/**
+	 * @param RegisterFormRequest $request
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
 	public function register (RegisterFormRequest $request)
 	{
-		$user           = new User;
-		$user->email    = $request->email;
-		$user->name     = $request->name;
-		$user->password = bcrypt($request->password);
-		$user->save();
-
 		return response([
 			'status' => 'success',
-			'data'   => $user,
+			'data'   => User::create([
+							'email'    => $request->email,
+							'name'     => $request->name,
+							'password' => $request->password,
+						]),
 		], 200);
 	}
 
 
+	/**
+	 * @param Request $request
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
 	public function login (Request $request)
 	{
 		$credentials = $request->only('email', 'password');
-		/** @noinspection PhpDynamicAsStaticMethodCallInspection */
-		if (! $token = JWTAuth::attempt($credentials)) {
+
+		if (! $token = JWTAuth::attempt($credentials))
 			return response([
 				'status' => 'error',
 				'error'  => 'invalid.credentials',
 				'msg'    => 'Invalid Credentials.',
 			], 400);
-		}
 
 		return response([
 			'status' => 'success',
@@ -45,10 +53,13 @@ class AuthController extends Controller
 	}
 
 
+	/**
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
 	public function user ()
 	{
 		/** @var User $user */
-		$user = User::find(Auth::user()->id);
+		$user         = User::findOrFail(Auth::user()->id);
 		$user->avatar = $user->profile->avatar;
 
 		return response([
@@ -57,6 +68,9 @@ class AuthController extends Controller
 		]);
 	}
 
+	/**
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
 	public function logout ()
 	{
 		JWTAuth::invalidate();
@@ -67,6 +81,9 @@ class AuthController extends Controller
 		], 200);
 	}
 
+	/**
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
 	public function refresh ()
 	{
 		return response([

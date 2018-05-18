@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\GroupType;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -23,9 +24,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-
         parent::boot();
+
+		Route::pattern('groupType', '[A-Z0-9_]+');
+		Route::model('groupType', GroupType::class);
     }
 
     /**

@@ -19,15 +19,17 @@ class CreateGroupTypesTable extends Migration
 		Schema::create('group_types', function(Blueprint $table) {
 			$table->increments('id');
 			$table->string('slug')
-				  ->unique()->comment           = 'group name';
+				  ->unique()->comment           = 'group slug';
+			$table->string('display_name')
+				  ->unique()->comment           = 'group display_name';
 			$table->string('description')
-				  ->unique()->comment           = 'group description';
+				  ->comment           = 'group description';
 			$table->string('img')->comment      = 'img url';
 			$table->string('requirements')
 				  ->nullable()->comment         = 'group requirements';
 			$table->string('duration')
 				  ->nullable()->comment         = 'group lesson duration';
-			$table->boolean('display')->comment = 'display or not';
+			$table->boolean('display')->default(false)->comment = 'display or not';
 			$table->integer('display_order')
 				  ->nullable()
 				  ->unique()->comment           = 'display order';

@@ -14,10 +14,31 @@ Route::group(['middleware' => 'api'], function() {
 		});
 	});
 
-	Route::group(['prefix' => 'instagram'], function() {
-		Route::get('', 'InstagramController@get');
-		//	Route::get('media', 'InstagramController@getMedia');
-		//    Route::get('/', 'InstagramController@get');
+
+	Route::group(['prefix' => 'admin', 'middleware' => ['jwt.auth', 'role:admin']], function() {
+
+		Route::group(['prefix' => 'crud'], function() {
+
+			Route::group(['prefix' => 'training'], function() {
+				Route::get('', 'GroupTypeController@get');
+				Route::post('', 'GroupTypeController@create');
+				Route::delete('{groupType}', 'GroupTypeController@delete');
+			});
+
+		});
+
+	});
+
+	Route::group(['prefix' => 'site'], function() {
+
+		Route::group(['prefix' => 'instagram'], function() {
+			Route::get('', 'InstagramController@get');
+			//	Route::get('media', 'InstagramController@getMedia');
+			//    Route::get('/', 'InstagramController@get');
+		});
+
+		Route::get('trainings', 'SiteController@getTrainings');
+
 	});
 
 
