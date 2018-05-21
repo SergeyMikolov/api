@@ -32,7 +32,8 @@ class CreateGroupTypesTable extends Migration
 			$table->boolean('display')->default(false)->comment = 'display or not';
 			$table->integer('display_order')
 				  ->nullable()
-				  ->unique()->comment           = 'display order';
+//				  ->unique() todo сделать уникальными
+				->comment           = 'display order';
 		});
 
 		DB::statement("COMMENT ON TABLE group_types IS 'Table with group types names'");

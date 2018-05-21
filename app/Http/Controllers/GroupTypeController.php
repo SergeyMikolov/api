@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupType\CreateGroupTypeRequest;
+use App\Http\Requests\GroupType\SaveOrderAdDisplayRequest;
 use App\Models\GroupType;
 
 /**
  * Class GroupTypeController
  * @package App\Http\Controllers
  */
-class GroupTypeController extends Controller
+class GroupTypeController extends BaseController
 {
 	/**
 	 * @param CreateGroupTypeRequest $request
@@ -50,10 +51,7 @@ class GroupTypeController extends Controller
 
 		\DB::commit();
 
-		return response([
-			'status' => 'success',
-			'data'   => $groupType,
-		]);
+		return $this->sendResponse($groupType);
 	}
 
 	/**
@@ -67,9 +65,7 @@ class GroupTypeController extends Controller
 		if (\File::exists($imagePath = $groupType->getRealImagePath()))
 			\File::delete($imagePath);
 
-		return response([
-			'status' => 'success',
-		]);
+		return $this->sendResponse();
 	}
 
 	/**
@@ -85,9 +81,24 @@ class GroupTypeController extends Controller
 			return $groupType;
 		});
 
-		return response([
-			'status' => 'success',
-			'data'   => $groupTypes->toArray(),
-		]);
+		return $this->sendResponse($groupTypes);
+	}
+
+	/**
+	 * @param SaveOrderAdDisplayRequest $request
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function saveOrderAndDisplay(SaveOrderAdDisplayRequest $request)
+	{
+		collect($request->group_types)->each(function($groupType) {
+			/** @var GroupType $groupType */
+			GroupType::whereSlug($groupType['slug'])
+					 ->update([
+						 'display'       => $groupType['display'],
+						 'display_order' => $groupType['display_order'],
+					 ]);
+		});
+
+		return $this->sendResponse(GroupType::all());
 	}
 }
