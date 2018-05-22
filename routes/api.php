@@ -22,7 +22,8 @@ Route::group(['middleware' => 'api'], function() {
 			Route::group(['prefix' => 'training'], function() {
 				Route::get('', 'GroupTypeController@get');
 				Route::post('', 'GroupTypeController@create');
-				Route::post('saveOrderAndDisplay', 'GroupTypeController@saveOrderAndDisplay');
+				Route::post('{groupType}', 'GroupTypeController@update');
+				Route::put('saveOrderAndDisplay', 'GroupTypeController@saveOrderAndDisplay');
 				Route::delete('{groupType}', 'GroupTypeController@delete');
 			});
 

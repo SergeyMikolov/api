@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupType\CreateGroupTypeRequest;
 use App\Http\Requests\GroupType\SaveOrderAdDisplayRequest;
+use App\Http\Requests\GroupType\UpdateGroupTypeRequest;
 use App\Models\GroupType;
 
 /**
@@ -56,6 +57,50 @@ class GroupTypeController extends BaseController
 
 	/**
 	 * @param GroupType $groupType
+	 * @param UpdateGroupTypeRequest $request
+	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+	 */
+	public function update (GroupType $groupType, UpdateGroupTypeRequest $request)
+	{
+		\DB::beginTransaction();
+
+		$fileName     = slugIt($request->display_name);
+		$oldImagePath = $groupType->getRealImagePath();
+		$filePath     = 'groups/' . $fileName . '.png';
+
+		if (! is_null($request->image)) {
+
+			if (\File::exists($oldImagePath))
+				\File::delete($oldImagePath);
+
+			$groupType->img = $filePath;
+			\Image::make(( $request->image ))
+				  ->encode('png', 50)
+				  ->save($oldImagePath);
+		}
+
+		if ($fileName !== $groupType->slug && is_null($request->image)) {
+			$groupType->img = $filePath;
+			$newImagePath   = $groupType->getRealImagePath();
+			rename($oldImagePath, $newImagePath);
+		}
+
+		$groupType->description  = $request->description;
+		$groupType->duration     = $request->duration;
+		$groupType->requirements = $request->requirements;
+		$groupType->display_name = $request->display_name;
+		$groupType->slug         = $fileName;
+		$groupType->save();
+
+		\DB::commit();
+
+		$groupType->fresh();
+
+		return $this->sendResponse($groupType);
+	}
+
+	/**
+	 * @param GroupType $groupType
 	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
 	 */
 	public function delete (GroupType $groupType)
@@ -74,12 +119,7 @@ class GroupTypeController extends BaseController
 	public function get ()
 	{
 		$groupTypes = GroupType::orderBy('display_order')
-							   ->get()
-		->map(function($groupType){
-			/** @var GroupType $groupType */
-			$groupType->img_url = $groupType->getImageUrl();
-			return $groupType;
-		});
+							   ->get();
 
 		return $this->sendResponse($groupTypes);
 	}
@@ -88,7 +128,7 @@ class GroupTypeController extends BaseController
 	 * @param SaveOrderAdDisplayRequest $request
 	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
 	 */
-	public function saveOrderAndDisplay(SaveOrderAdDisplayRequest $request)
+	public function saveOrderAndDisplay (SaveOrderAdDisplayRequest $request)
 	{
 		collect($request->group_types)->each(function($groupType) {
 			/** @var GroupType $groupType */

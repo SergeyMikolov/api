@@ -24,7 +24,9 @@ function imgUrl (string $imagePath) : string
  */
 function makeArray ($data) : array
 {
-	if ($data instanceof \Illuminate\Support\Collection OR $data instanceof \Illuminate\Database\Eloquent\Collection)
+	if (   $data instanceof \Illuminate\Support\Collection
+		OR $data instanceof \Illuminate\Database\Eloquent\Collection
+		OR $data instanceof \Illuminate\Database\Eloquent\Model     )
 		return $data->toArray();
 	else
 		return (array)$data;

@@ -74,6 +74,21 @@ class GroupType extends Model
 	];
 
 	/**
+	 * The accessors to append to the model's array form.
+	 *
+	 * @var array
+	 */
+	protected $appends = ['img_url'];
+
+	/**
+	 * @return string
+	 */
+	public function getImgUrlAttribute()
+	{
+		return $this->getImageUrl();
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getRouteKeyName()
