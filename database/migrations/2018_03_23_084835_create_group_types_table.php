@@ -22,7 +22,7 @@ class CreateGroupTypesTable extends Migration
 				  ->unique()->comment           = 'group slug';
 			$table->string('display_name')
 				  ->unique()->comment           = 'group display_name';
-			$table->string('description')
+			$table->text('description')
 				  ->comment           = 'group description';
 			$table->string('img')->comment      = 'img url';
 			$table->string('requirements')

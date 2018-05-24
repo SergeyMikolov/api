@@ -33,13 +33,13 @@ Route::group(['middleware' => 'api'], function() {
 
 	Route::group(['prefix' => 'site'], function() {
 
+		Route::get('trainings', 'SiteController@getTrainings');
+
 		Route::group(['prefix' => 'instagram'], function() {
 			Route::get('', 'InstagramController@get');
 			//	Route::get('media', 'InstagramController@getMedia');
 			//    Route::get('/', 'InstagramController@get');
 		});
-
-		Route::get('trainings', 'SiteController@getTrainings');
 
 	});
 
