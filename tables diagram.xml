@@ -188,21 +188,33 @@
         </key>
         <comment>активность ученицы</comment>
     </table>
-    <table x="955" y="249" name="group_types">
+    <table x="1323" y="230" name="group_types">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
-        <row name="name" null="0" autoincrement="0">
+        <row name="display_name" null="0" autoincrement="0">
             <datatype>VARCHAR</datatype>
             <default>'NULL'</default></row>
         <row name="descriprion" null="1" autoincrement="0">
             <datatype>VARCHAR</datatype>
             <default>NULL</default></row>
-        <row name="requirements" null="1" autoincrement="0">
+        <row name="slug" null="0" autoincrement="0">
             <datatype>VARCHAR</datatype>
+            <default>'NULL'</default></row>
+        <row name="img" null="0" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>'NULL'</default></row>
+        <row name="requirements" null="0" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>'NULL'</default></row>
+        <row name="duration" null="0" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>'NULL'</default></row>
+        <row name="display" null="1" autoincrement="0">
+            <datatype>bit</datatype>
             <default>NULL</default></row>
-        <row name="duration" null="1" autoincrement="0">
-            <datatype>VARCHAR</datatype>
+        <row name="display_order" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
             <default>NULL</default></row>
         <key type="PRIMARY" name="">
             <part>id</part>
@@ -256,5 +268,30 @@
         <key type="PRIMARY" name="">
             <part>id</part>
         </key>
+    </table>
+    <table x="154" y="553" name="trainers">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="user_id" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="descriprion" null="1" autoincrement="0">
+            <datatype>MEDIUMTEXT</datatype>
+            <default>NULL</default></row>
+        <row name="img" null="1" autoincrement="0">
+            <datatype>VARCHAR</datatype>
+            <default>NULL</default></row>
+        <row name="display" null="0" autoincrement="0">
+            <datatype>bit</datatype>
+            <default>NULL</default></row>
+        <row name="display_order" null="0" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
+        <comment>команда тренеров</comment>
     </table>
 </sql>

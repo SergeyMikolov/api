@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereRequirements($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\GroupType whereSlug($value)
  * @mixin \Eloquent
+ * @property-read string $img_url
  */
 class GroupType extends Model
 {

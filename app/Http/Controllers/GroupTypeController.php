@@ -11,7 +11,7 @@ use App\Models\GroupType;
  * Class GroupTypeController
  * @package App\Http\Controllers
  */
-class GroupTypeController extends BaseController
+class GroupTypeController extends Controller
 {
 	/**
 	 * @param CreateGroupTypeRequest $request
@@ -24,7 +24,7 @@ class GroupTypeController extends BaseController
 		$fileName = slugIt($request->display_name);
 
 		$lastGroupType = GroupType::orderBy('display_order', 'DESC')->first();
-		if (is_null($lastGroupType))
+		if (null === $lastGroupType)
 			$displayOrder = 1;
 		else
 			$displayOrder = $lastGroupType->display_order + 1;
@@ -46,7 +46,7 @@ class GroupTypeController extends BaseController
 		if (\File::exists($imagePath))
 			\File::delete($imagePath);
 
-		\Image::make(( $request->image ))
+		\Image::make($request->image)
 			  ->encode('png', 50)
 			  ->save($imagePath);
 
@@ -56,7 +56,7 @@ class GroupTypeController extends BaseController
 	}
 
 	/**
-	 * @param GroupType $groupType
+	 * @param GroupType              $groupType
 	 * @param UpdateGroupTypeRequest $request
 	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
 	 */
@@ -68,18 +68,18 @@ class GroupTypeController extends BaseController
 		$oldImagePath = $groupType->getRealImagePath();
 		$filePath     = 'groups/' . $fileName . '.png';
 
-		if (! is_null($request->image)) {
+		if (null !== $request->image) {
 
 			if (\File::exists($oldImagePath))
 				\File::delete($oldImagePath);
 
 			$groupType->img = $filePath;
-			\Image::make(( $request->image ))
+			\Image::make($request->image)
 				  ->encode('png', 50)
 				  ->save($oldImagePath);
 		}
 
-		if ($fileName !== $groupType->slug && is_null($request->image)) {
+		if ($fileName !== $groupType->slug && null === $request->image) {
 			$groupType->img = $filePath;
 			$newImagePath   = $groupType->getRealImagePath();
 			rename($oldImagePath, $newImagePath);
@@ -130,12 +130,12 @@ class GroupTypeController extends BaseController
 	 */
 	public function saveOrderAndDisplay (SaveOrderAdDisplayRequest $request)
 	{
-		collect($request->group_types)->each(function($groupType) {
+		collect($request->group_types)->each(function ($groupType) {
 			/** @var GroupType $groupType */
-			GroupType::whereSlug($groupType['slug'])
+			GroupType::whereSlug($groupType[ 'slug' ])
 					 ->update([
-						 'display'       => $groupType['display'],
-						 'display_order' => $groupType['display_order'],
+						 'display'       => $groupType[ 'display' ],
+						 'display_order' => $groupType[ 'display_order' ],
 					 ]);
 		});
 

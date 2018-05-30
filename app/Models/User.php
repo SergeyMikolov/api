@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -59,6 +62,7 @@ use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User withoutTrashed()
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\GroupType[] $groupTypes
+ * @property-read \App\Models\TrainerInfo $trainerInfo
  */
 class User extends Authenticatable
 {
@@ -113,41 +117,53 @@ class User extends Authenticatable
         'token',
     ];
 
-    protected $dates = [
+	/**
+	 * @var array
+	 */
+	protected $dates = [
         'deleted_at',
     ];
 
-    /**
-     * Build Social Relationships.
-     *
-     * @var array
-     */
-    public function social()
-    {
-        return $this->hasMany('App\Models\Social');
+	/**
+	 * Build Social Relationships.
+	 *
+	 * @var array
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+    public function social() : HasMany
+	{
+        return $this->hasMany(Social::class);
     }
 
-    /**
-     * User Profile Relationships.
-     *
-     * @var array
-     */
-    public function profile()
-    {
-        return $this->hasOne('App\Models\Profile');
+	/**
+	 * User Profile Relationships.
+	 *
+	 * @var array
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+    public function profile() : HasOne
+	{
+        return $this->hasOne(Profile::class);
     }
 
-    // User Profile Setup - SHould move these to a trait or interface...
+    // User Profile Setup - Should move these to a trait or interface...
 
-    public function profiles()
-    {
-        return $this->belongsToMany('App\Models\Profile')->withTimestamps();
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public function profiles() : BelongsToMany
+	{
+        return $this->belongsToMany(Profile::class)->withTimestamps();
     }
 
-    public function hasProfile($name)
-    {
+	/**
+	 * @param $name
+	 * @return bool
+	 */
+	public function hasProfile($name) : bool
+	{
         foreach ($this->profiles as $profile) {
-            if ($profile->name == $name) {
+            if ($profile->name === $name) {
                 return true;
             }
         }
@@ -155,22 +171,37 @@ class User extends Authenticatable
         return false;
     }
 
-    public function assignProfile($profile)
+	/**
+	 * @param $profile
+	 */
+	public function assignProfile($profile)
     {
         return $this->profiles()->attach($profile);
     }
 
-    public function removeProfile($profile)
-    {
+	/**
+	 * @param $profile
+	 * @return int
+	 */
+	public function removeProfile($profile) : int
+	{
         return $this->profiles()->detach($profile);
     }
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
 	 */
-	public function groupTypes ()
+	public function groupTypes () : BelongsToMany
 	{
 		return $this->belongsToMany(GroupType::class, 'user_group_type',
 			'user_id', 'group_type_id');
+	}
+
+	/**
+	 * @return HasOne
+	 */
+	public function trainerInfo() : HasOne
+	{
+		return $this->hasOne(TrainerInfo::class);
 	}
 }

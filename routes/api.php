@@ -27,6 +27,10 @@ Route::group(['middleware' => 'api'], function() {
 				Route::delete('{groupType}', 'GroupTypeController@delete');
 			});
 
+			Route::group(['prefix' => 'trainer'], function() {
+				Route::get('users', 'TrainerController@getTrainers');
+			});
+
 		});
 
 	});
@@ -51,7 +55,7 @@ Route::group([
 	'prefix'     => 'admin',
 ], function() {
 	Route::get('/', function() {
-		dd('HELLO ADMIN!');
+
 	});
 });
 
@@ -69,6 +73,5 @@ Route::get('/test', function() {
 	$groupType = \App\Models\GroupType::firstOrFail();
 //	$user->groupTypes()->attach($groupType->id);
 //	$user->groupTypes()->attach($groupType->id);
-	dd($user->groupTypes->toArray());
 
 });
