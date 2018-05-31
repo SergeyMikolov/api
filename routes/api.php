@@ -37,11 +37,13 @@ Route::group(['middleware' => 'api'], function() {
 				Route::delete('{user}', 'TrainerController@delete');
 		});
 
+		});
 	});
 
 	Route::group(['prefix' => 'site'], function() {
 
 		Route::get('trainings', 'SiteController@getTrainings');
+		Route::get('trainers', 'SiteController@getTrainers');
 
 		Route::group(['prefix' => 'instagram'], function() {
 			Route::get('', 'InstagramController@get');
@@ -51,9 +53,8 @@ Route::group(['middleware' => 'api'], function() {
 
 	});
 
+});
 
-	});
-	Route::group(['prefix' => 'schedule'], function() {
-		Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
-	});
+Route::group(['prefix' => 'schedule'], function() {
+	Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
 });
