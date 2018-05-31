@@ -37,7 +37,7 @@ use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
  * @property-read \Illuminate\Database\Eloquent\Collection|\jeremykenedy\LaravelRoles\Models\Role[] $roles
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Social[] $social
  * @property-read \Illuminate\Database\Eloquent\Collection|\jeremykenedy\LaravelRoles\Models\Permission[] $userPermissions
- * @method static bool|null forceDelete()
+ * @method bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User onlyTrashed()
  * @method static bool|null restore()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereActivated($value)
@@ -63,6 +63,7 @@ use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\GroupType[] $groupTypes
  * @property-read \App\Models\TrainerInfo $trainerInfo
+ * @property-read string $full_name
  */
 class User extends Authenticatable
 {
@@ -125,6 +126,29 @@ class User extends Authenticatable
     ];
 
 	/**
+	 * @return string
+	 */
+	public function getRouteKeyName() : string
+	{
+		return 'name';
+	}
+
+	/**
+	 * The accessors to append to the model's array form.
+	 *
+	 * @var array
+	 */
+	protected $appends = ['full_name'];
+
+	/**
+	 * @return string
+	 */
+	public function getFullNameAttribute() : string
+	{
+		return $this->first_name . ' ' . $this->last_name;
+	}
+
+	/**
 	 * Build Social Relationships.
 	 *
 	 * @var array
@@ -176,7 +200,8 @@ class User extends Authenticatable
 	 */
 	public function assignProfile($profile)
     {
-        return $this->profiles()->attach($profile);
+	    /** @noinspection PhpVoidFunctionResultUsedInspection */
+	    return $this->profiles()->attach($profile);
     }
 
 	/**

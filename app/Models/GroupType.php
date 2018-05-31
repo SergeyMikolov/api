@@ -84,7 +84,7 @@ class GroupType extends Model
 	/**
 	 * @return string
 	 */
-	public function getImgUrlAttribute()
+	public function getImgUrlAttribute() : string
 	{
 		return $this->getImageUrl();
 	}
@@ -100,7 +100,7 @@ class GroupType extends Model
 	/**
 	 * @return string
 	 */
-	public function getRealImagePath()
+	public function getRealImagePath() : string
 	{
 		return \Storage::disk('images')->path($this->img);
 	}

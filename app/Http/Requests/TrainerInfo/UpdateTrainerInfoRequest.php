@@ -5,13 +5,13 @@ namespace App\Http\Requests\TrainerInfo;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Class CreateGroupTypeRequest
+ * Class UpdateTrainerInfoRequest
  * @package App\Http\Requests\groups
  * @property string $description
  * @property string $image
  * @property string $name
  */
-class CreateTrainerInfoRequest extends FormRequest
+class UpdateTrainerInfoRequest extends FormRequest
 {
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -31,7 +31,7 @@ class CreateTrainerInfoRequest extends FormRequest
 	public function rules () : array
 	{
 		return [
-			'image'       => 'required|string',
+			'image'       => 'string',
 			'description' => 'required|string|min:3',
 		];
 	}

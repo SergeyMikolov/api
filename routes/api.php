@@ -6,6 +6,7 @@ Route::group(['middleware' => 'api'], function() {
 
 		Route::post('signup', 'AuthController@register');
 		Route::post('login', 'AuthController@login');
+		/** @noinspection PhpUndefinedMethodInspection */
 		Route::middleware('jwt.refresh')->get('/token/refresh', 'AuthController@refresh');
 
 		Route::group(['middleware' => 'jwt.auth'], function() {
@@ -29,7 +30,12 @@ Route::group(['middleware' => 'api'], function() {
 
 			Route::group(['prefix' => 'trainer'], function() {
 				Route::get('users', 'TrainerController@getTrainers');
+				Route::get('', 'TrainerController@getTrainersInfo');
+				Route::post('{user}', 'TrainerController@create');
+				Route::put('saveOrderAndDisplay', 'TrainerController@saveOrderAndDisplay');
 			});
+				Route::put('{user}', 'TrainerController@update');
+				Route::delete('{user}', 'TrainerController@delete');
 
 		});
 
@@ -61,17 +67,4 @@ Route::group([
 
 Route::group(['prefix' => 'schedule'], function() {
 	Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
-});
-
-
-Route::get('/test', function() {
-
-	$user = \App\Models\User::whereHas('roles', function($query) {
-		$query->whereName('Trainer');
-	})
-							->first();
-	$groupType = \App\Models\GroupType::firstOrFail();
-//	$user->groupTypes()->attach($groupType->id);
-//	$user->groupTypes()->attach($groupType->id);
-
 });

@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TrainerInfo extends Model
 {
+	const IMG_FOLDER = 'trainers/';
 	/**
 	 * The database table used by the model.
 	 *
@@ -65,6 +66,37 @@ class TrainerInfo extends Model
 	protected $hidden = [
 		'id',
 	];
+
+	/**
+	 * @return string
+	 */
+	public function getRealImagePath() : string
+	{
+		return \Storage::disk('images')->path($this->img);
+	}
+
+	/**
+	 * The accessors to append to the model's array form.
+	 *
+	 * @var array
+	 */
+	protected $appends = ['img_url'];
+
+	/**
+	 * @return string
+	 */
+	public function getImgUrlAttribute() : string
+	{
+		return $this->getImageUrl();
+	}
+
+	/**
+	 * @return \Illuminate\Contracts\Routing\UrlGenerator|string
+	 */
+	public function getImageUrl()
+	{
+		return imgUrl($this->img);
+	}
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

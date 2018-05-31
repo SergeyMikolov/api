@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\GroupType;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,9 @@ class RouteServiceProvider extends ServiceProvider
 
 		Route::pattern('groupType', '[A-Z0-9_]+');
 		Route::model('groupType', GroupType::class);
+
+	    Route::pattern('user', '[A-Z0-9_]+');
+	    Route::model('user', User::class);
     }
 
     /**
