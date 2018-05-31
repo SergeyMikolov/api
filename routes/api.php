@@ -33,10 +33,8 @@ Route::group(['middleware' => 'api'], function() {
 				Route::get('', 'TrainerController@getTrainersInfo');
 				Route::post('{user}', 'TrainerController@create');
 				Route::put('saveOrderAndDisplay', 'TrainerController@saveOrderAndDisplay');
-			});
 				Route::put('{user}', 'TrainerController@update');
 				Route::delete('{user}', 'TrainerController@delete');
-
 		});
 
 	});
@@ -54,17 +52,8 @@ Route::group(['middleware' => 'api'], function() {
 	});
 
 
-});
-
-Route::group([
-	'middleware' => 'auth:api',
-	'prefix'     => 'admin',
-], function() {
-	Route::get('/', function() {
-
 	});
-});
-
-Route::group(['prefix' => 'schedule'], function() {
-	Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
+	Route::group(['prefix' => 'schedule'], function() {
+		Route::get('/instagram-feed', 'ScheduleController@instagramFeedUpdate');
+	});
 });
