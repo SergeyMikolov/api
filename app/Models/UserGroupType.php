@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\UserGroupType
  *
+ * @property int $id
  * @property int $user_id
  * @property int $group_type_id
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\UserGroupType whereGroupTypeId($value)

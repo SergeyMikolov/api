@@ -18,22 +18,16 @@ class CreateGroupsTable extends Migration
 	{
 		Schema::create('groups', function(Blueprint $table) {
 			$table->increments('id');
-			$table->integer('group_type_id')->comment            = 'Group type';
-			$table->integer('trainer_id')->comment               = 'trainer id';
+			$table->integer('user_group_type_id')->comment       = 'Group type';
 			$table->integer('day_id')->comment                   = 'day id';
 			$table->time('training_time')->comment               = 'training time of the day';
 			$table->integer('capacity')->comment                 = 'current group capacity';
 			$table->integer('max_capacity')->comment             = 'max group capacity';
 			$table->boolean('is_active')->default(true)->comment = 'group is active';
 
-			$table->foreign('group_type_id')
+			$table->foreign('user_group_type_id')
 				  ->references('id')
-				  ->on('group_types')
-				  ->onDelete('cascade');
-
-			$table->foreign('trainer_id')
-				  ->references('id')
-				  ->on('users')
+				  ->on('user_group_type')
 				  ->onDelete('cascade');
 
 			$table->foreign('day_id')

@@ -37,6 +37,11 @@ Route::group(['middleware' => 'api'], function() {
 				Route::delete('{user}', 'TrainerController@delete');
 		});
 
+			Route::group(['prefix' => 'user-group-type'], function (){
+				Route::get('', 'UserGroupTypeController@list');
+				Route::post('{user}', 'UserGroupTypeController@sync');
+			});
+
 		});
 	});
 

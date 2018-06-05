@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Group
  *
  * @property int $id
- * @property int $group_type_id
+ * @property int $user_group_type_id
  * @property int $trainer_id
  * @property int $day_id
  * @property string $training_time
@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $is_active
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereCapacity($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereDayId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereGroupTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereUserGroupTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereIsActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Group whereMaxCapacity($value)
@@ -47,8 +47,7 @@ class Group extends Model
 	 * @var array
 	 */
 	protected $fillable = [
-		'type_id',
-		'trainer_id',
+		'user_group_type_id',
 		'day_id',
 		'time',
 		'capacity',

@@ -41,13 +41,9 @@
     <row name="id" null="1" autoincrement="1">
         <datatype>INTEGER</datatype>
         <default>NULL</default></row>
-    <row name="type_id" null="0" autoincrement="0">
+    <row name="user_group_type_id" null="0" autoincrement="0">
         <datatype>INTEGER</datatype>
-        <default>NULL</default><relation table="group_types" row="id" />
-    </row>
-    <row name="trainer_id" null="0" autoincrement="0">
-        <datatype>INTEGER</datatype>
-        <default>NULL</default><relation table="user" row="id" />
+        <default>NULL</default><relation table="user_group_type" row="id" />
     </row>
     <row name="day_id" null="0" autoincrement="0">
         <datatype>INTEGER</datatype>
@@ -73,11 +69,10 @@
     </key>
     <comment>группы</comment>
 </table>
-    <table x="464" y="378" name="user">
+    <table x="482" y="381" name="user">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
-            <default>NULL</default><relation table="user_group" row="user_id" />
-            <relation table="user_group_type" row="user_id" />
+            <default>NULL</default><relation table="user_group_type" row="user_id" />
         </row>
         <key type="PRIMARY" name="">
             <part>id</part>
@@ -94,19 +89,6 @@
             <part>id</part>
         </key>
         <comment>дни недели</comment>
-    </table>
-    <table x="496" y="251" name="user_group">
-        <row name="user_id" null="0" autoincrement="1">
-            <datatype>INTEGER</datatype>
-            <default>NULL</default></row>
-        <row name="group_id" null="0" autoincrement="0">
-            <datatype>INTEGER</datatype>
-            <default>NULL</default><relation table="groups" row="id" />
-        </row>
-        <key type="PRIMARY" name="">
-            <part>user_id</part>
-        </key>
-        <comment>привязка учениц к группам</comment>
     </table>
     <table x="108" y="307" name="payments">
         <row name="id" null="1" autoincrement="1">
@@ -269,7 +251,7 @@
             <part>id</part>
         </key>
     </table>
-    <table x="154" y="553" name="trainers">
+    <table x="154" y="553" name="trainers_info">
         <row name="id" null="1" autoincrement="1">
             <datatype>INTEGER</datatype>
             <default>NULL</default></row>
@@ -293,5 +275,21 @@
             <part>id</part>
         </key>
         <comment>команда тренеров</comment>
+    </table>
+    <table x="545" y="256" name="user_group_type">
+        <row name="id" null="1" autoincrement="1">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default></row>
+        <row name="user_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="user" row="id" />
+        </row>
+        <row name="group_type_id" null="1" autoincrement="0">
+            <datatype>INTEGER</datatype>
+            <default>NULL</default><relation table="group_types" row="id" />
+        </row>
+        <key type="PRIMARY" name="">
+            <part>id</part>
+        </key>
     </table>
 </sql>
