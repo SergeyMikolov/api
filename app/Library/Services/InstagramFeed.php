@@ -128,7 +128,7 @@ class InstagramFeed implements InstagramFeedInterface
 				'id'         => $item->getId(),
 				'media_type' => $item->getMediaType(),
 				'embed'      => preg_replace('/<script [\w\d\s=\"\/\.]+><\/script>/', '', json_decode($response)->html),
-				'preview'    => $this->getMediaCollection($item),
+//				'preview'    => $this->getMediaCollection($item),
 			];
 		});
 	}

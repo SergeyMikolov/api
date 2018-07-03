@@ -10,7 +10,7 @@ if $ENV_DEV; then
     cd "$path/dev" \
     && docker-compose -p studio_dev up -d
 
-    CONTAINER=$(docker ps -aqf "name=studiodev_app")
+    CONTAINER=$(docker ps -aqf "name=studio_dev_app")
 
     docker exec $CONTAINER chmod 777 -R storage/ \
     && docker exec $CONTAINER php artisan config:clear \

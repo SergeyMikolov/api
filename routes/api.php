@@ -51,7 +51,7 @@ Route::group(['middleware' => 'api'], function() {
 		Route::get('trainers', 'SiteController@getTrainers');
 
 		Route::group(['prefix' => 'instagram'], function() {
-			Route::get('', 'InstagramController@get');
+			Route::get('/', 'InstagramController@get');
 			//	Route::get('media', 'InstagramController@getMedia');
 			//    Route::get('/', 'InstagramController@get');
 		});
