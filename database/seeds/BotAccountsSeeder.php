@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\BotAccount;
+use App\Models\Instagram\BotAccount;
 use Illuminate\Database\Seeder;
 
 class BotAccountsSeeder extends Seeder

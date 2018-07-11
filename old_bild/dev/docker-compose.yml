@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
 
   # application (code)
@@ -10,11 +10,18 @@ services:
     volumes:
       - ${PROJECT_DIR}:/app
     networks:
-      - backend
+      - studio
     environment:
       - DB_PORT=5432
       - DB_HOST=database
-      - RHOST=redis
+
+  cron:
+    build:
+      context: ./
+      dockerfile: cron.dockerfile
+    networks:
+      - studio
+
 
   # http server
   web:
@@ -23,9 +30,9 @@ services:
       dockerfile: web.dockerfile
     working_dir: /app
     networks:
-      - backend
-#    volumes_from:
-#      - app
+      - studio
+    volumes_from:
+      - app
     ports:
       - 666:80
 
@@ -33,41 +40,40 @@ services:
   database:
     image: postgres:10.1
     networks:
-      - backend
+      - studio
     environment:
       - POSTGRES_DB=studio
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:
-      - 54321:5432
+      - 54326:5432
 
   # adminer
   adminer:
     image: adminer
     networks:
-      - backend
+      - studio
     ports:
       - 8888:8080
 
+  #portainer:
+    #image: portainer/portainer
+    #networks:
+      #- studio
+    #volumes:
+      #- /var/run/docker.sock:/var/run/docker.sock
+    #ports:
+      #- 600:9000
+
   redis:
     image: redis
-    hostname: redis
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_EXTRA_FLAGS=--maxmemory 100mb
-    ports:
-      - 6379:6379
-    command: ["redis-server", "--appendonly", "yes"]
     networks:
-      - backend
+      - studio
 
-  cron:
-    build:
-      context: ./
-      dockerfile: cron.dockerfile
-    networks:
-      - backend
 
 networks:
-  backend:
+  studio:
     driver: "bridge"

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\InstagramFeedRequest;
-use App\Library\Services\InstagramFeed;
+use App\Services\Library\Instagram\InstaService;
+use Flugg\Responder\Http\Responses\ResponseBuilder;
 use Illuminate\Support\Facades\Cache;
-use Response;
 
 /**
  * Class InstagramController
@@ -14,45 +14,44 @@ use Response;
 class InstagramController extends Controller
 {
 	/**
-	 * @var InstagramFeed
+	 * @var InstaService
 	 */
-	protected $instagramFeed;
+	protected $instagram;
 
 	/**
 	 * InstagramController constructor.
-	 * @param InstagramFeed $instagramFeed
+	 * @param InstaService $instaService
 	 */
-	public function __construct (InstagramFeed $instagramFeed)
+	public function __construct (InstaService $instaService)
 	{
-		$this->instagramFeed = $instagramFeed;
+		$this->instagram = $instaService;
 	}
 
 	/**
 	 * Get instagram feed(paginated)
 	 *
 	 * @param InstagramFeedRequest $request
-	 * @return \Illuminate\Http\Response
+	 * @return ResponseBuilder
 	 */
-	public function get (InstagramFeedRequest $request)
+	public function get (InstagramFeedRequest $request) : ResponseBuilder
 	{
 		try {
-			return Cache::remember('i_feed', InstagramFeed::CACHETIME, function() {
-				return $this->instagramFeed->get();
+			$feed = Cache::remember('i_feed', $this->instagram::CACHETIME, function () {
+				return $this->instagram->getUserFeed();
 			})
-						->forPage($request->page, $request->on_page)
-						->values();
+			             ->forPage($request->page, $request->on_page)
+			             ->values();
 		} catch (\Exception $exception) {
 
 			\Log::error($exception->getMessage(), [
-				'file'  => $exception->getFile(),
-				'line'  => $exception->getLine()
+				'file' => $exception->getFile(),
+				'line' => $exception->getLine(),
 			]);
 
-			return Response::make([
-				'message'     => 'Service Unavailable',
-				'status_code' => 503,
-			], 503);
+			return $this->error(503, 'Service Unavailable');
 		}
+
+		return $this->success($feed);
 	}
 
 }

@@ -12,7 +12,7 @@ class HttpClient
 	/**
 	 * @return Client
 	 */
-	public static function getHttpClient() : Client
+	public static function make() : Client
 	{
 		return new Client([
 			'timeout'         => 10.0,

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-PROJECT_NAME_DEV='studio'
-
 # colors for console
 RED='\033[0;31m'
 BLUE='\033[0;34m'
@@ -17,7 +15,7 @@ while test 2 -gt 0; do
         -h|--help)
             echo "Options:"
             printf "${BLUE}-h${NC}  ${BLUE}--help${NC}             show brief help\n"
-            printf "${BLUE}-e${NC}  ${BLUE}--env${NC}              versions and configs that will be used in build. Can be ${GREEN}dev${NC}\n"
+            printf "${BLUE}-e${NC}  ${BLUE}--env${NC}              versions and configs that will be used in build. Can be ${GREEN}dev${NC}, ${GREEN}prod${NC} or ${GREEN}test${NC}\n"
             exit 0
             ;;
 
@@ -26,6 +24,11 @@ while test 2 -gt 0; do
 
             if [ "$1" == "dev" ]; then
                 ENV_DEV=true
+            elif [ "$1" == "prod" ]; then
+                ENV_DEV=false
+            elif [ "$1" == "test" ]; then
+                ENV_DEV=false
+                ENV_TEST=true
             else
                 printf "${RED}Invalid arguments -env!${NC}\n"
                 printf "for show help use ${BLUE}-h${NC} or ${BLUE}--help${NC}\n"
