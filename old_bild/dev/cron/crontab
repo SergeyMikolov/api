@@ -1,1 +1,0 @@
-* * * * * curl http://web/api/schedule/instagram-feed?key=5qs7JUj5HuE6ZjdZMc2hv8xjrlI7Q21BQgTc1o8SmYE >> /var/log/cron.log 2>&1

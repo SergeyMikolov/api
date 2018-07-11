@@ -1,3 +1,0 @@
-
-
-0 * * * * curl http://web/v1/schedule/energy?key=0QfYIecUCldgInFl+O6CJbjcAOcg3+rvFJLwyC3g+pY= >> /var/log/cron.log 2>&1
